@@ -26,8 +26,8 @@ library
       base >= 4.7 && < 5
     , lens
     , text
-    , composite-base >= 0.4.2.0 && <1
-    , swagger2 >= 2.1.4 && <3
+    , composite-base >= 0.4 && <1
+    , swagger2 >= 2.1 && <3
   exposed-modules:
       Composite.Swagger
   default-language: Haskell2010
@@ -42,8 +42,8 @@ test-suite hspec-tests
       base >= 4.7 && < 5
     , lens
     , text
-    , composite-base >= 0.4.2.0 && <1
-    , swagger2 >= 2.1.4 && <3
+    , composite-base >= 0.4 && <1
+    , swagger2 >= 2.1 && <3
     , composite-swagger
     , hspec
     , insert-ordered-containers

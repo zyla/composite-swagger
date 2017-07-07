@@ -14,8 +14,8 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - text
-- composite-base >= 0.4.2.0 && <1
-- swagger2 >= 2.1.4 && <3
+- composite-base >= 0.4 && <1
+- swagger2 >= 2.1 && <3
 
 default-extensions:
 - FlexibleInstances

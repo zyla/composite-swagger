@@ -1,0 +1,39 @@
+name:                composite-swagger
+version:             0.1.0.0
+synopsis:            Utilities for using Composite records with Data.Swagger.
+homepage:            https://github.com/zyla/composite-swagger
+license:             BSD3
+author:              Maciej Bielecki
+maintainer:          zyla@prati.pl
+copyright:           Maciej Bielecki (c) 2017
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- text
+- composite-base >= 0.4.2.0 && <1
+- swagger2 >= 2.1.4 && <3
+
+default-extensions:
+- FlexibleInstances
+- FlexibleContexts
+- TypeApplications
+- DataKinds
+- KindSignatures
+- ScopedTypeVariables
+- TypeOperators
+
+library:
+  source-dirs: src
+
+tests:
+  hspec-tests:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+    - composite-swagger
+    - hspec
+    - insert-ordered-containers

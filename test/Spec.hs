@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE QuasiQuotes #-}
 module Main where
 
 import Test.Hspec
@@ -7,24 +8,29 @@ import qualified Data.Swagger as S
 import Composite.Record
 import Composite.Swagger ()
 import qualified Control.Lens as L
-import qualified Data.HashMap.Strict.InsOrd as IOHM
+import qualified Data.Aeson as A
+import Data.Aeson.QQ (aesonQQ)
 
 main :: IO ()
 main = hspec spec
 
 type TestRec = Record
-  '[ "foo" :-> Int
+  '[ "foo" :-> Integer
    , "bar" :-> Bool
-   , "optional" :-> Maybe Int ]
+   , "optional" :-> Maybe Integer ]
 
 spec :: Spec
 spec = do
   describe "ToSchemaRecord instance" $
     it "should generate the schema" $ do
-      let schema = S.toSchema (Proxy @TestRec)
-      IOHM.keys (L.view S.properties schema)
-        `shouldBe` ["foo", "bar", "optional"]
-      L.view S.required schema
-        `shouldBe` ["foo", "bar"]
-      L.view S.type_ schema
-        `shouldBe` S.SwaggerObject
+      A.toJSON (S.toSchema (Proxy @TestRec))
+        `shouldBe` [aesonQQ|
+           {
+             "type": "object",
+             "properties": {
+                "foo": { "type": "integer" },
+                "bar": { "type": "boolean" },
+                "optional": { "type": "integer" }
+              },
+              "required": ["foo", "bar"]
+           } |]

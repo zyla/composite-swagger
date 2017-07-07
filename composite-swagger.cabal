@@ -48,5 +48,6 @@ test-suite hspec-tests
     , singleton-bool
     , composite-swagger
     , hspec
-    , insert-ordered-containers
+    , aeson
+    , aeson-qq
   default-language: Haskell2010

@@ -25,7 +25,8 @@ declareNamedSchemaRecord :: forall rs proxy.
   -> S.Declare (S.Definitions S.Schema) S.NamedSchema
 declareNamedSchemaRecord _ = unnamedSchema <$> declareSchemaRecord (Proxy @rs)
   where
-    unnamedSchema = S.NamedSchema Nothing
+    unnamedSchema schema = S.NamedSchema Nothing $
+      schema & L.set S.type_ S.SwaggerObject
 
 class ToSchemaRecord (rs :: [*]) where
   declareSchemaRecord :: proxy rs -> S.Declare (S.Definitions S.Schema) S.Schema

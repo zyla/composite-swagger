@@ -26,3 +26,5 @@ spec = do
         `shouldBe` ["foo", "bar", "optional"]
       L.view S.required schema
         `shouldBe` ["foo", "bar"]
+      L.view S.type_ schema
+        `shouldBe` S.SwaggerObject

@@ -6,6 +6,7 @@ import Data.Proxy
 import GHC.TypeLits
 import Composite
 import Control.Lens ((&))
+import qualified Data.Singletons.Bool as SB
 import qualified Data.Text as T
 import qualified Control.Lens as L
 import qualified Data.Swagger as S
@@ -32,15 +33,26 @@ class ToSchemaRecord (rs :: [*]) where
 instance ToSchemaRecord '[] where
   declareSchemaRecord _ = pure mempty
 
-instance (KnownSymbol label, S.ToSchema a, ToSchemaRecord rs)
+instance (KnownSymbol label, S.ToSchema a, ToSchemaRecord rs, SB.SBoolI (IsRequired a))
       => ToSchemaRecord ((label :-> a) : rs) where
+
   declareSchemaRecord _ = do
     valueSchema <- S.declareSchemaRef (Proxy @a)
     let
       fieldName = T.pack $ symbolVal (Proxy @label)
+      isRequired = sboolToBool (SB.sbool @(IsRequired a))
       fieldSchema = mempty
         & L.set S.properties [ (fieldName, valueSchema) ]
-        & L.set S.required [ fieldName ]
+        & L.set S.required (if isRequired then [ fieldName ] else [])
 
     restSchema <- declareSchemaRecord (Proxy @rs)
     pure $ fieldSchema `mappend` restSchema
+
+type family IsRequired (ty :: *) :: Bool where
+  IsRequired (Maybe a) = False
+  IsRequired a = True
+
+sboolToBool :: SB.SBool b -> Bool
+sboolToBool = \case
+  SB.STrue -> True
+  SB.SFalse -> False

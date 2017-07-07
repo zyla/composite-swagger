@@ -14,7 +14,8 @@ main = hspec spec
 
 type TestRec = Record
   '[ "foo" :-> Int
-   , "bar" :-> Bool ]
+   , "bar" :-> Bool
+   , "optional" :-> Maybe Int ]
 
 spec :: Spec
 spec = do
@@ -22,5 +23,6 @@ spec = do
     it "should generate the schema" $ do
       let schema = S.toSchema (Proxy @TestRec)
       IOHM.keys (L.view S.properties schema)
+        `shouldBe` ["foo", "bar", "optional"]
+      L.view S.required schema
         `shouldBe` ["foo", "bar"]
-      L.view S.required schema `shouldBe` ["foo", "bar"]
